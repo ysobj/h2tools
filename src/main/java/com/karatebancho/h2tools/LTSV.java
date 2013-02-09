@@ -1,19 +1,24 @@
 package com.karatebancho.h2tools;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import org.h2.engine.Constants;
+import org.h2.store.fs.FileUtils;
 import org.h2.tools.SimpleResultSet;
 
 public class LTSV {
     public static ResultSet read(Connection conn, String fileName) throws Exception {
-        BufferedReader reader = new BufferedReader(new FileReader(new File(fileName)));
+        InputStream in = FileUtils.newInputStream(fileName);
+        in = new BufferedInputStream(in, Constants.IO_BUFFER_SIZE);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         String record;
         SimpleResultSet rs = new SimpleResultSet();
         try {
